@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /api/node_modules
+/api/uploaded
 /.pnp
 .pnp.js
 
