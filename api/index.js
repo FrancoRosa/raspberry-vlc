@@ -1,7 +1,8 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const fs = require('fs');
 const cors = require('cors');
+const fs = require('fs');
+const { exec } = require('child_process');
 
 const configFile = '\\uploaded\\config.json';
 let config = [];
@@ -38,13 +39,14 @@ readConfigFile()
 // - Upload if the file dont exists
 // - Get video configuration
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/',
   // debug: true,
 }));
-app.use(cors());
+
 app.get('/', (req, res) => {
   res.send('... server working, waiting for commands\n');
 });
@@ -113,5 +115,25 @@ app.post('/api/videos', (req, res) => {
   
 });
 
+app.get('/api/play', (req,res) => {
+  exec('dir', (err, stdout, stderr) => {
+    console.log(err)
+    console.log(stdout)
+    console.log(stderr)
+  })
+  res.send('paying')
+})
+
+app.get('/api/stop', (req,res) => {
+  exec('dir', (err, stdout, stderr) => {
+    console.log(err)
+    console.log(stdout)
+    console.log(stderr)
+  })
+  res.send('stoped')
+})
+
+
+
 port = 9999
-app.listen(port, () => console.log('...listening on '+port))
+app.listen(port, () => console.log('...listening on ' + port))
