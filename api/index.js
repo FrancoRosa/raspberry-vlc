@@ -2,6 +2,44 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const Joi = require('joi');
 const app = express();
+const fs = require('fs');
+
+const configFile = '/uploaded/config.json';
+let config = [];
+
+
+
+const readConfigFile = () => {
+  fs.readFileSync(__dirname + configFile, (err, data) => {
+    if (data) {
+      config = JSON.parse(data);
+    } else {
+      if (err.message.includes('no such file')) {
+        console.log('... no config file found')
+        writeConfigFile()          
+      } else {
+        console.log(err.message)
+      }
+    }
+  });
+}
+
+const writeConfigFile = () => {
+  fs.writeFileSync(__dirname + configFile, config ,err => {
+    if(err) {
+      console.log('... failed saving config file');
+    } else {
+      console.log('... success saving config file');
+    }
+  });
+}
+
+readConfigFile()
+// TO DO:
+// - See files available
+// - A file update adds a new entry on db
+// - Upload if the file dont exists
+// - Get video configuration
 
 app.use(express.json());
 app.use(fileUpload({
@@ -10,19 +48,12 @@ app.use(fileUpload({
   debug: true,
 }));
 
-const courses = [
-  { id: 1, name: 'course1'},
-  { id: 2, name: 'course2'},
-  { id: 3, name: 'course3'},
-  { id: 4, name: 'course4'},
-]
-
 app.get('/', (req, res) => {
-  res.send('waiting for commands\n');
+  res.send('... server working, waiting for commands\n');
 });
 
-app.get('/api/courses', (req,res) => {
-  res.send(courses)
+app.get('/api/videos', (req,res) => {
+  res.send(config)
 })
 
 app.post('/api/courses', (req, res) => {
