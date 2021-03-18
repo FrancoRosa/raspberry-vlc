@@ -4,7 +4,9 @@ const App = () => {
   return (
     <div className="container">
       <div className="columns">
-        <ConfigManager />
+        <ConfigManager identifier="1" />
+        <ConfigManager identifier="2" />
+        <ConfigManager identifier="3" />
       </div>
     </div>
   );

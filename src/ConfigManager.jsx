@@ -1,53 +1,80 @@
 import { useState } from "react";
 import axios from 'axios';
 
-const ConfigManager = () => {
-  const [mainIP, setMainIP] = useState('')
+const ConfigManager = ({ identifier }) => {
+  const [ip, setIP] = useState('');
+  const [videos, setVideos] = useState([]);
+
+  const deviceTest = () => {
+    const url=`http://${ip}:9999`
+    console.log(url)
+    axios.get(url, {timeout: 1000})
+      .then(resp => {
+        console.log(resp.data);
+        document.querySelector('.device-test-'+identifier).textContent=resp.data;
+      })
+      .catch(err => {
+        console.log(err);
+        document.querySelector('.device-test-'+identifier).textContent='... device not working';
+      });
+  }
   
-  const Device = () => {
-    const [ip, setIP] = useState('');
-    const deviceTest = () => {
-      const url=`http://${ip}:9999`
-      console.log(url)
-      setMainIP(ip)
-      document.querySelector('.device-test').textContent='';
-      axios.get(url)
-        .then(resp => {
-          console.log(resp.data);
-          document.querySelector('.device-test').textContent=resp.data;
-        })
-        .catch(err => {
-          console.log(err);
-          document.querySelector('.device-test').textContent='Device not working';
-        });
-    }
-    const updateIP = event => {
-      setIP(event.target.value);
-    } 
+  const updateIP = event => {
+    setIP(event.target.value);
+  } 
   
-    return (
-      <section className='section' id='device'>
-        <h1>Device</h1>
-        <input class="input" type="text" 
-          placeholder="192.168.0.12"
-          value={ip}
-          onChange={updateIP}
-        />
-        <button className="button" onClick={deviceTest}>test</button>
-        <p className="device-test"></p>
-      </section>
-    );
-  };
+  const getVideos = () => {
+    const url=`http://${ip}:9999/api/videos`
+    axios.get(url, {timeout: 1000})
+      .then(resp => {
+        console.log(resp.data);
+        setVideos(resp.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setVideos([])
+      })
+  }
   
   return (
     <div className="column">
-      <Device />      
+      <section className='section' id='device'>
+        <h1>Device: {ip}</h1>
+        <div className="field is-grouped">
+          <input class="input" type="text" 
+            placeholder="192.168.0.12"
+            value={ip}
+            onChange={updateIP}
+          />
+          <button className="button" onClick={deviceTest}>Test</button>
+        </div>
+        <p className={"device-test-"+identifier}></p>
+      </section>     
+      
       <section className='section' id='table'>
         <h1>Videos</h1>
-        <table className="table">
-          for
+        <button className="button" onClick={getVideos}>Get videos</button>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Enable</th>
+              <th>Blur</th>
+            </tr>
+          </thead>
+          <tbody>
+            {videos.map(video => 
+              <tr>
+                <td>{video.id}</td>
+                <td>{video.enable}</td>
+                <td>{video.blur}</td>
+              </tr>
+            )}
+          </tbody>
         </table>
-        <button className='button'>Refresh</button>
+      </section>
+      <section className='section' id='upload'>
+        
       </section>
     </div>
   );
