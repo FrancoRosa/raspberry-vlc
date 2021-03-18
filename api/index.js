@@ -1,7 +1,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const app = express();
 const fs = require('fs');
+const cors = require('cors');
 
 const configFile = '\\uploaded\\config.json';
 let config = [];
@@ -37,14 +37,14 @@ readConfigFile()
 // - A file update adds a new entry on db
 // - Upload if the file dont exists
 // - Get video configuration
-
+const app = express();
 app.use(express.json());
 app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/',
   // debug: true,
 }));
-
+app.use(cors());
 app.get('/', (req, res) => {
   res.send('... server working, waiting for commands\n');
 });
@@ -113,4 +113,5 @@ app.post('/api/videos', (req, res) => {
   
 });
 
-app.listen(9999, () => console.log('...listening on 3000, great'))
+port = 9999
+app.listen(port, () => console.log('...listening on '+port))

@@ -1,6 +1,12 @@
-function App() {
+import ConfigManager from "./ConfigManager"
+
+const App = () => {
   return (
-    <div>EmptyApp</div>
+    <div className="container">
+      <div className="columns">
+        <ConfigManager />
+      </div>
+    </div>
   );
 }
 
