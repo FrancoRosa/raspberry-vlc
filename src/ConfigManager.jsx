@@ -36,6 +36,29 @@ const ConfigManager = ({ identifier }) => {
       })
   }
   
+
+  const playVideos = () => {
+    const url=`http://${ip}:9999/api/videos/play`
+    axios.get(url, {timeout: 1000})
+      .then(resp => {
+        console.log(resp.data)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  const stopVideos = () => {
+    const url=`http://${ip}:9999/api/videos/stop`
+    axios.get(url, {timeout: 1000})
+      .then(resp => {
+        console.log(resp.data)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   return (
     <div className="column">
       <section className='section' id='device'>
@@ -75,6 +98,10 @@ const ConfigManager = ({ identifier }) => {
       </section>
       <section className='section' id='upload'>
         
+      </section>
+      <section className='section' id='media-control'>
+        <button className="button" onClick={playVideos}>play</button>
+        <button className="button" onClick={stopVideos}>stop</button>
       </section>
     </div>
   );
