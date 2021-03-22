@@ -5,6 +5,7 @@ body::-webkit-scrollbar {
 .panel::-webkit-scrollbar {
   display: none;
 }
+
 .column {
   border: solid 1px rgb(43, 53, 24);
   border-radius: 10px;
@@ -13,7 +14,7 @@ body::-webkit-scrollbar {
 .panel {
   padding: 1em;
   margin: 1em;
-  height: 80vh;
+  height: 60vh;
   overflow: scroll;
 }
 
@@ -24,4 +25,31 @@ body::-webkit-scrollbar {
 
 .panel-block > .controls > *{
   margin: 0 0.5em;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.1em;
+  margin: 0.1em;
+}
+
+.field > input {
+  width: 60%;
+}
+
+.endpoint {
+  padding: 1em;
+  margin: 1em;
+}
+
+.videoselector {
+  padding: 0.2em;
+  margin: 0.2em;
+}
+
+.details {
+  padding: 1em;
+  margin: 1em;
 }
