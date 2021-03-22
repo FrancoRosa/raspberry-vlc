@@ -1,17 +1,26 @@
-const SetCard = () => {
+const SetCard = ({title, active}) => {
+  const playSet = () => {
+    console.log('... play');
+  }
+
+  const stopSet = () => {
+    console.log('... stop');
+  }
+
+  const activateSet = () => {
+    console.log('... activateSet')
+  }
   return(
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          Card header
-        </p>
-        <button class="card-header-icon" aria-label="more options">
-          <span class="icon">
-            <i class="fas fa-angle-down" aria-hidden="true"></i>
-          </span>
-        </button>
-      </header>
-  </div>
+    <a 
+      className={`panel-block ${active ? 'is-active' : ''}`}
+      onClick={activateSet}
+    > 
+      <p>{title}</p>
+      {active && <div className="controls">
+        <i className="fas fa-play" onClick={playSet}/>
+        <i className="fas fa-stop" onClick={stopSet}/>
+      </div>}
+    </a>
   )
 }
 

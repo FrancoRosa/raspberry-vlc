@@ -1,4 +1,27 @@
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
 .column {
   border: solid 1px rgb(43, 53, 24);
   border-radius: 10px;
+}
+
+.panel {
+  padding: 1em;
+  margin: 1em;
+  height: 80vh;
+  overflow: scroll;
+}
+
+.panel-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-block > .controls > *{
+  margin: 0 0.5em;
 }
