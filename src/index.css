@@ -45,11 +45,26 @@ body::-webkit-scrollbar {
 }
 
 .videoselector {
-  padding: 0.2em;
-  margin: 0.2em;
+  padding: 0;
+  margin: 0 0.2em;
 }
 
 .details {
-  padding: 1em;
-  margin: 1em;
+  padding: 1em 2em 0 0;
+  margin: 1em 2em 0 0;
+}
+
+.blurselector {
+  display: flex;
+  justify-content: center;
+}
+
+.blurselector > .field{
+  display: flex;
+  width: 40%;
+  justify-content: space-around;
+}
+
+.slider {
+  width: 100%;
 }

@@ -6,7 +6,7 @@ import SetDetail from "./SetDetail";
 const App = () => {
   return (
     <div className="columns">
-      <div className="column is-one-third">
+      <div className="column is-one-quarter">
         <SetBrowser />
         <EndPointConfig />
       </div>

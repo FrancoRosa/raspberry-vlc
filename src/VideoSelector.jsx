@@ -9,12 +9,12 @@ const VideoSelector = () => {
           playing={true}
           controls
           width='100%'
-          height='60vh'
+          height='50vh'
         />
       </div>
-      <div className="card-content">
-        <button className="button">Select</button>
-        <button className="button">Upload</button>
+      <div className="card-footer">
+        <button className="button card-footer-item">Select</button>
+        <button className="button card-footer-item">Upload</button>
       </div>
     </div>
   )
