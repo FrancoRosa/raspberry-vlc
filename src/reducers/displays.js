@@ -15,9 +15,14 @@ const getDisplays = () => {
   }
 }
 
+const saveToLocalStorage = displays => {
+  localStorage.setItem("displays", JSON.stringify(displays))
+}
+
 const displays = (state = getDisplays(), action) => {
   switch (action.type) {
     case SET_DISPLAYS:
+      saveToLocalStorage(action.displays)
       return action.displays;
     default:
       return state;

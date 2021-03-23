@@ -10,6 +10,7 @@ const getVideoSets = () => {
     return JSON.parse(videosets);
   } else {
     videosets = [];
+    localStorage.setItem("videosets", videosets)
     return videosets;
   }
 }
