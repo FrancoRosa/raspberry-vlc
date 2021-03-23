@@ -74,7 +74,13 @@ body::-webkit-scrollbar {
   outline: none;
   background-color: transparent;
   font-size: 3rem;
-  text-align: center;
   color: white;
   max-width: 80%;
+}
+
+.delete-set{
+  position: absolute;
+  right: 1em;
+  padding: 2em;
+  cursor: pointer;
 }

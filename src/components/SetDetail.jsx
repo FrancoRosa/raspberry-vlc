@@ -1,21 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { removeFromVideoSets, setTitleToVideoSet } from "../actions";
 import BlurSelector from "./BlurSelector";
 import VideoSelector from "./VideoSelector";
 
-const SetDetail = ({ setTitle }) => {
-  const [header, setHeader] = useState(setTitle)
+const SetDetail = ({ videosets, setTitleToVideoSet, removeFromVideoSets }) => {
+  let videoset = videosets.find(videoset => videoset.selected == true)
+  const [header, setHeader] = useState(videoset ? videoset.setTitle: '')
+
+  const updateHeader = e => {
+    setHeader(e.target.value);
+    setTitleToVideoSet(videoset.id, e.target.value);
+  }
   
+  useEffect(()=>{
+    videoset = videosets.find(videoset => videoset.selected === true)
+    setHeader(videoset ? videoset.setTitle: '')
+  },[videosets])
+
   return (
-    <div className="details">
-      <input type="text" value={header} className="title title-input" onChange={e => setHeader(e.target.value)}/>
-      <div className="columns">
-        <VideoSelector />
-        <VideoSelector />
-        <VideoSelector />
-      </div>
-      <BlurSelector />
+    <div>
+      {videoset && <div className="details">
+        <input type="text" value={header} className="title title-input" onChange={updateHeader}/>
+        <div className="columns">
+          <VideoSelector />
+          <VideoSelector />
+          <VideoSelector />
+        </div>
+        <BlurSelector />
+        <span 
+          className="icon has-text-danger delete-set"
+          onClick={() => removeFromVideoSets(videoset.id)}
+        >
+          <i className="fas fa-trash"/>
+        </span>
+      </div>}
     </div>
   )
 }
 
-export default SetDetail;
+const mapStateToProps = state => ({
+  videosets: state.videosets
+})
+
+const mapDispatchToProps = dispatch => ({
+  setTitleToVideoSet: (id, title) => dispatch(setTitleToVideoSet(id, title)),
+  removeFromVideoSets: id => dispatch(removeFromVideoSets(id))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetDetail);
