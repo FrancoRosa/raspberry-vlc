@@ -1,7 +1,7 @@
 import {
   ADD_TO_VIDEOSETS,
   REMOVE_FROM_VIDEOSETS,
-  SET_VIDEOSETS,
+  SELECT_VIDEOSET,
 } from '../actions/index';
 
 const getVideoSets = () => {
@@ -36,8 +36,12 @@ const videoset = (state = getVideoSets(), action) => {
       return [
         ...state.filter(videoset => videoset.id !== action.videoset.id),
       ];
-    case SET_VIDEOSETS:
-      return action.videosets
+    case SELECT_VIDEOSET:
+      return [
+        ...state.map(videoset => ({
+          ...videoset, selected: videoset.id == action.id ? true : false
+        }))
+      ]
     default:
       return state;
   }

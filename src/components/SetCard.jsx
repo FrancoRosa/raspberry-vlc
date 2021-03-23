@@ -1,4 +1,8 @@
-const SetCard = ({title, active}) => {
+import { connect } from "react-redux";
+import { selectVideoSet } from "../actions";
+
+const SetCard = ({ setInfo, selectVideoSet }) => {
+  const { setTitle, selected, id } = setInfo;
   const playSet = () => {
     console.log('... play');
   }
@@ -12,11 +16,11 @@ const SetCard = ({title, active}) => {
   }
   return(
     <a 
-      className={`panel-block ${active ? 'is-active' : ''}`}
-      onClick={activateSet}
+      className={`panel-block ${selected ? 'is-active' : ''}`}
+      onClick={() => selectVideoSet(id)}
     > 
-      <p>{title}</p>
-      {active && <div className="controls">
+      <p>{setTitle}</p>
+      {selected && <div className="controls">
         <i className="fas fa-play" onClick={playSet}/>
         <i className="fas fa-stop" onClick={stopSet}/>
       </div>}
@@ -24,4 +28,7 @@ const SetCard = ({title, active}) => {
   )
 }
 
-export default SetCard;
+const mapDispatchToProps = dispatch => ({
+  selectVideoSet: id => dispatch(selectVideoSet(id))
+})
+export default connect(null, mapDispatchToProps)(SetCard);

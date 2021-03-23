@@ -1,33 +1,19 @@
+import { connect } from "react-redux";
+import AddCard from "./AddCard";
 import SetCard from "./SetCard";
 
-const SetBrowser = () => {
+const SetBrowser = ({ videosets }) => {
   return (
     <nav className="panel">
       <p className="panel-heading"> List of sets</p>
-      <SetCard title="This mountain" />
-      <SetCard title="This dark mountain" />
-      <SetCard title="This tiny mountain" />
-      <SetCard title="This mountain" />
-      <SetCard title="This dark mountain" />
-      <SetCard title="This tiny mountain" />
-      <SetCard title="This mountain" />
-      <SetCard title="This dark mountain" />
-      <SetCard title="This tiny mountain" />
-      <SetCard title="This mountain" />
-      <SetCard title="This dark mountain" />
-      <SetCard title="This tiny mountain" />
-      <SetCard title="This tiny mountain" />
-      <a className="panel-block">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="fas fa-plus"></i>
-          </span>
-          <span>Add new set</span>
-        </span>
-      </a>
-      
+      {videosets.map(videoset => <SetCard setInfo={videoset} />)}
+      <AddCard />
     </nav>
   );
 };
 
-export default SetBrowser;
+const mapStateToProps = state => ({
+  videosets: state.videosets,
+})
+
+export default connect(mapStateToProps)(SetBrowser);

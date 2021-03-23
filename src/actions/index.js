@@ -1,18 +1,17 @@
-export const SET_VIDEOSETS = 'SET_VIDEOSETS';
+export const SELECT_VIDEOSET = 'SELECT_VIDEOSET';
 export const ADD_TO_VIDEOSETS = 'ADD_TO_VIDEOSETS';
 export const REMOVE_FROM_VIDEOSETS = 'REMOVE_FROM_VIDEOSETS';
 export const SET_DISPLAYS = 'SET_DISPLAYS';
 
-export const setVideoSets = sets => (
+export const selectVideoSet = id => (
   {
-    sets,
-    type: SET_VIDEOSETS,
+    id,
+    type: SELECT_VIDEOSET,
   }
 );
 
-export const addToVideoSets = item => (
+export const addToVideoSets = () => (
   {
-    item,
     type: ADD_TO_VIDEOSETS,
   }
 );

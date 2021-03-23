@@ -9,7 +9,7 @@ const BlurSelector = () => {
           className="slider" 
           step="0.1" min="0" max="10" 
           value={blur} type="range"
-          onChange={e => setBlur(parseInt(e.target.value).toFixed(1))}
+          onInput={e => setBlur(parseFloat(e.target.value).toFixed(1))}
         />
         <p>{blur}</p>
       </div>
