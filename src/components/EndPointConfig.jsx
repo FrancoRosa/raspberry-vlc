@@ -38,7 +38,52 @@ const EndPointConfig = ({ displays, setDisplays }) => {
     })
   }, [sc1])
 
+
+  useEffect(()=>{
+    axios.get(`http://${sc2}`, {timeout: 2000})
+    .then(resp => {
+      console.log(resp.data);
+      setDisplays([
+        ...displays.map(display => {
+          if(displays.indexOf(display) === 1 ) return {...display, enabled: true}; 
+          else return display;
+        })
+      ])
+    })
+    .catch(err => {
+      console.log(err);
+      setDisplays([
+        ...displays.map(display => {
+          if(displays.indexOf(display) === 1 ) return {...display, enabled: false}; 
+          else return display;
+        })
+      ])
+    })
+  }, [sc2])
   
+
+  useEffect(()=>{
+    axios.get(`http://${sc3}`, {timeout: 2000})
+    .then(resp => {
+      console.log(resp.data);
+      setDisplays([
+        ...displays.map(display => {
+          if(displays.indexOf(display) === 2 ) return {...display, enabled: true}; 
+          else return display;
+        })
+      ])
+    })
+    .catch(err => {
+      console.log(err);
+      setDisplays([
+        ...displays.map(display => {
+          if(displays.indexOf(display) === 2 ) return {...display, enabled: false}; 
+          else return display;
+        })
+      ])
+    })
+  }, [sc3])
+
   return (
     <div className='card endpoint'>
       <div className="field">
@@ -52,7 +97,7 @@ const EndPointConfig = ({ displays, setDisplays }) => {
       <div className="field">
         <label className="label is-small">Display 2:</label>
         <input 
-          className="input is-small"
+          className={`input is-small ${displays[1].enabled ? 'is-success' : 'is-danger'}`}
           type="text" value={sc2} 
           onChange={e => {setSc2(e.target.value); updateDisplayIP(1, e.target.value)}}
         />
@@ -60,7 +105,7 @@ const EndPointConfig = ({ displays, setDisplays }) => {
       <div className="field">
         <label className="label is-small">Display 3:</label>
         <input 
-          className="input is-small"
+          className={`input is-small ${displays[2].enabled ? 'is-success' : 'is-danger'}`}
           type="text" value={sc3} 
           onChange={e => {setSc3(e.target.value); updateDisplayIP(2, e.target.value)}}
         />
