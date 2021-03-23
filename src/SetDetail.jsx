@@ -1,10 +1,13 @@
+import { useState } from "react";
 import BlurSelector from "./BlurSelector";
 import VideoSelector from "./VideoSelector";
 
-const SetDetail = () => {
+const SetDetail = ({ setTitle }) => {
+  const [header, setHeader] = useState(setTitle)
+  
   return (
     <div className="details">
-      <h1 className='title'>The Beautiful Mountains</h1>
+      <input type="text" value={header} className="title title-input" onChange={e => setHeader(e.target.value)}/>
       <div className="columns">
         <VideoSelector />
         <VideoSelector />

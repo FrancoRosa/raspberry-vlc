@@ -11,7 +11,7 @@ const App = () => {
         <EndPointConfig />
       </div>
       <div className="column">
-        <SetDetail />
+        <SetDetail setTitle="The Beautiful Mountains"/>
       </div>
     </div>
   );
