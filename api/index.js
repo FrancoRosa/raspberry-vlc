@@ -48,14 +48,17 @@ app.use(fileUpload({
 }));
 
 app.get('/', (req, res) => {
+  console.log('... get to \'/\'')
   res.send('... server working, waiting for commands\n');
 });
 
 app.get('/api/videos', (req,res) => {
+  console.log('... get to \'/api/videos\'')
   res.send(config)
 })
 
 app.put('/api/videos/:id', (req, res) => {
+  console.log('... put to \'/api/videos/:id\'')
   console.log(req.body)
   const video = config.find(video => video.id===req.params.id) 
   if (!video) res.status(404).send('video not found, upload it first')
@@ -65,12 +68,14 @@ app.put('/api/videos/:id', (req, res) => {
 })
 
 app.get('/api/videos/:id', (req,res) => {
+  console.log('... get to \'/api/videos/:id\'')
   const video = config.find(video => video.id===req.params.id) 
   if (!video) res.status(404).send('not found')
   res.send(video);
 })
 
 app.delete('/api/videos/:id', (req, res) => {
+  console.log('... delete to \'/api/videos/:id\'')
   const video = config.find(video => video.id === req.params.id) 
   if (!video) res.status(404).send('not found')
   const index = config.indexOf(video).features
@@ -83,6 +88,7 @@ app.delete('/api/videos/:id', (req, res) => {
 })
 
 app.post('/api/videos', (req, res) => {
+  console.log('... post to \'/api/videos\'')
   let sampleFile;
   let uploadPath;
   let files;
@@ -116,6 +122,7 @@ app.post('/api/videos', (req, res) => {
 });
 
 app.get('/api/play', (req,res) => {
+  console.log('... get to \'/api/play\'')
   exec('dir', (err, stdout, stderr) => {
     console.log(err)
     console.log(stdout)
@@ -125,6 +132,7 @@ app.get('/api/play', (req,res) => {
 })
 
 app.get('/api/stop', (req,res) => {
+  console.log('... get to \'/api/stop\'')
   exec('dir', (err, stdout, stderr) => {
     console.log(err)
     console.log(stdout)
