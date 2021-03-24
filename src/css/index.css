@@ -84,3 +84,11 @@ body::-webkit-scrollbar {
   padding: 2em;
   cursor: pointer;
 }
+
+.card-footer{
+  flex-direction: column;
+}
+
+.file-selector{
+  width: 100%;
+}
