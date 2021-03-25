@@ -2,7 +2,7 @@ export const SELECT_VIDEOSET = 'SELECT_VIDEOSET';
 export const SET_TITLE_TO_VIDEOSET = 'SET_TITLE_TO_VIDEOSET';
 export const ADD_TO_VIDEOSETS = 'ADD_TO_VIDEOSETS';
 export const REMOVE_FROM_VIDEOSETS = 'REMOVE_FROM_VIDEOSETS';
-export const SET_DISPLAYS = 'SET_DISPLAYS';
+export const SET_DISPLAYS_IPS = 'SET_DISPLAYS_IPS';
 export const SET_SAVED_DISPLAYS = 'SET_SAVED_DISPLAYS';
 
 export const selectVideoSet = id => (
@@ -36,7 +36,7 @@ export const removeFromVideoSets = id => (
 export const setDisplays = displays => (
   {
     displays,
-    type: SET_DISPLAYS,
+    type: SET_DISPLAYS_IPS,
   }
 );
 

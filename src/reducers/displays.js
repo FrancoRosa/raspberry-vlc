@@ -1,28 +1,30 @@
-import { SET_DISPLAYS } from '../actions';
+import { SET_DISPLAYS_IPS } from '../actions';
 import { SET_SAVED_DISPLAYS } from '../actions';
 
-const getDisplays = () => {
-  let displays = localStorage.getItem("displays");
-  if (displays) {
-    return JSON.parse(displays)
+
+const getDisplaysIPs = () => {
+  let displays = [
+    { ip: '', enabled: false, saved: [] },
+    { ip: '', enabled: false, saved: [] },
+    { ip: '', enabled: false, saved: [] }
+  ]
+  let displaysIPs = localStorage.getItem("displays");
+  if (displaysIPs) {
+    displaysIPs = JSON.parse(displaysIPs)
+    return displays.map(display => ({...display, ip: displaysIPs[displays.indexOf(display)].ip}))
   } else {
-    displays = [
-      { ip: '', enabled: false, saved: [] },
-      { ip: '', enabled: false, saved: [] },
-      { ip: '', enabled: false, saved: [] }
-    ]
-    localStorage.setItem("displays", JSON.stringify(displays))
+    localStorage.setItem("displays", JSON.stringify(displays.map(display => ({ip: display.ip}))))
     return displays
   }
 }
 
 const saveToLocalStorage = displays => {
-  localStorage.setItem("displays", JSON.stringify(displays))
+  localStorage.setItem("displays", JSON.stringify(displays.map(display=>({ip: display.ip}))))
 }
 
-const displays = (state = getDisplays(), action) => {
+const displays = (state = getDisplaysIPs(), action) => {
   switch (action.type) {
-    case SET_DISPLAYS:
+    case SET_DISPLAYS_IPS:
       saveToLocalStorage(action.displays)
       return action.displays;
     case SET_SAVED_DISPLAYS:

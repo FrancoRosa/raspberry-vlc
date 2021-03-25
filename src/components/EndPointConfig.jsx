@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { setDisplays } from '../actions';
+import { setDisplays, setSavedDisplays } from '../actions';
 
-const EndPointConfig = ({ displays, setDisplays }) => {
+const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
   const [sc1, setSc1] = useState(displays[0].ip);
   const [sc2, setSc2] = useState(displays[1].ip);
   const [sc3, setSc3] = useState(displays[2].ip);
+  
   const updateDisplayIP = (index, ip) => {
     setDisplays([
       ...displays.map(display => {
@@ -16,74 +17,56 @@ const EndPointConfig = ({ displays, setDisplays }) => {
     ])
   }
   
-  useEffect(()=>{
-    axios.get(`http://${sc1}`, {timeout: 2000})
+  const checkIP = (displayName, displayArray, displayCallBack) => {
+    axios.get(`http://${displayName}`, {timeout: 2000})
     .then(resp => {
       console.log(resp.data);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 0 ) return {...display, enabled: true}; 
+      displayCallBack([
+        ...displayArray.map(display => {
+          if(displayArray.indexOf(display) === 0 ) return {...display, enabled: true}; 
           else return display;
         })
       ])
     })
     .catch(err => {
       console.log(err);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 0 ) return {...display, enabled: false}; 
+      displayCallBack([
+        ...displayArray.map(display => {
+          if(displayArray.indexOf(display) === 0 ) return {...display, enabled: false}; 
           else return display;
         })
       ])
     })
+  }
+
+  const getSavedVideos = (displayName, saveCallBack) => {
+    axios.get(`http://${displayName}/api/videos`, {timeout: 2000})
+    .then(resp => {
+      console.log(resp.data);
+      saveCallBack(displayName, resp.data)
+    })
+    .catch(err => {
+      console.log(err);
+      saveCallBack(displayName, [])
+    })
+  }
+
+  useEffect(()=>{
+    checkIP(sc1, displays, setDisplays);
+    getSavedVideos(sc1, setSavedDisplays);
   }, [sc1])
 
-
   useEffect(()=>{
-    axios.get(`http://${sc2}`, {timeout: 2000})
-    .then(resp => {
-      console.log(resp.data);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 1 ) return {...display, enabled: true}; 
-          else return display;
-        })
-      ])
-    })
-    .catch(err => {
-      console.log(err);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 1 ) return {...display, enabled: false}; 
-          else return display;
-        })
-      ])
-    })
+    checkIP(sc2, displays, setDisplays)
+    getSavedVideos(sc2, setSavedDisplays);
   }, [sc2])
   
-
   useEffect(()=>{
-    axios.get(`http://${sc3}`, {timeout: 2000})
-    .then(resp => {
-      console.log(resp.data);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 2 ) return {...display, enabled: true}; 
-          else return display;
-        })
-      ])
-    })
-    .catch(err => {
-      console.log(err);
-      setDisplays([
-        ...displays.map(display => {
-          if(displays.indexOf(display) === 2 ) return {...display, enabled: false}; 
-          else return display;
-        })
-      ])
-    })
+    checkIP(sc3, displays, setDisplays)
+    getSavedVideos(sc3, setSavedDisplays);
   }, [sc3])
 
+  
   return (
     <div className='card endpoint'>
       <div className="field">
@@ -119,7 +102,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setDisplays: displays => dispatch(setDisplays(displays))
+  setDisplays: displays => dispatch(setDisplays(displays)),
+  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EndPointConfig)

@@ -37,7 +37,7 @@ readConfigFile()
 // TO DO:
 // - See files available
 // - A file update adds a new entry on db
-// - Upload if the file dont exists
+// - Upload if the file don't exists
 // - Get video configuration
 const app = express();
 app.use(cors());
@@ -106,10 +106,7 @@ app.post('/api/videos', (req, res) => {
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     sampleFile = req.files.sampleFile;
     uploadPath = __dirname + '/uploaded/' + sampleFile.name;
-    config.push({
-      id: sampleFile.name,
-      features: {},
-    })
+    config.push(sampleFile.name)
     writeConfigFile();
     // Use the mv() method to place the file somewhere on your server
     sampleFile.mv(uploadPath, function(err) {
