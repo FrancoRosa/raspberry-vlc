@@ -4,6 +4,9 @@
 /node_modules
 /api/node_modules
 /api/uploaded
+/api/disp1/uploaded
+/api/disp2/uploaded
+/api/disp3/uploaded
 /.pnp
 .pnp.js
 
