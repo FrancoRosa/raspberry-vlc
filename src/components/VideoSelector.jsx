@@ -1,16 +1,32 @@
 
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 
 const VideoSelector = ({box}) => {
   const [path, setPath] = useState('');
   const [name, setName] = useState('...');
-
+  const [file, setFile] = useState();
+  
   const handleFiles = e => {
     let localPath = URL.createObjectURL(e.target.files[0]);
     let localName = e.target.files[0].name
+    setFile(e.target.files[0])
     setPath(localPath)
     setName(localName)
+  }
+
+  const uploadVideo = () => {
+    console.log(file)
+    let formData = new FormData();
+    formData.append('sampleFile', file)
+    const url = 'http://localhost:9999/api/videos'
+    axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    console.log('uploadVideo')
   }
 
   useEffect(()=>{
@@ -50,7 +66,7 @@ const VideoSelector = ({box}) => {
             </span>
           </label>
         </div>
-        <button className="button card-footer-item">Upload</button>
+        <button className="button card-footer-item" onClick={uploadVideo}>Upload</button>
       </div>
     </div>
   )

@@ -92,3 +92,27 @@ body::-webkit-scrollbar {
 .file-selector{
   width: 100%;
 }
+
+input[type="range"] {
+  -webkit-appearance: none;
+ }
+ 
+ input[type="range"]:focus {
+  outline: none;
+ }
+
+ input[type="range"]::-webkit-slider-runnable-track {
+  height: 5px;
+  border: solid 1px #107964;
+  background: #0a5546;
+ }
+
+  input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 15px;
+  background: #22dab5;
+  margin-top: -5px;
+  border-radius: 50%;
+ }
+ 

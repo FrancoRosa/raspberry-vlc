@@ -100,7 +100,7 @@ app.post('/api/videos', (req, res) => {
       return res.status(400).send('No files were uploaded.');
     }
     if (files.includes(req.files.sampleFile.name)) {
-        return res.status(400).send('File already uploaded');
+        return res.status(200).send('File already uploaded');
     }
   
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file

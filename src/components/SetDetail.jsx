@@ -24,8 +24,8 @@ const SetDetail = ({ videosets, setTitleToVideoSet, removeFromVideoSets }) => {
         <input type="text" value={header} className="title title-input" onChange={updateHeader}/>
         <div className="columns">
           <VideoSelector box="0"/>
-          <VideoSelector box="1"/>
-          <VideoSelector box="2"/>
+          {/* <VideoSelector box="1"/>
+          <VideoSelector box="2"/> */}
         </div>
         <BlurSelector />
         <span 
