@@ -4,7 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const configFile = '\\uploaded\\config.json';
+const configFile = '/uploaded/config.json';
 let config = [];
 
 const readConfigFile = () => {
@@ -26,6 +26,7 @@ const writeConfigFile = () => {
   fs.writeFile(__dirname + configFile, JSON.stringify(config) ,err => {
     if(err) {
       console.log('... failed saving config file');
+      console.log(err);
     } else {
       console.log('... success saving config file');
     }
