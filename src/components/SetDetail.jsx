@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { removeFromVideoSets, setTitleToVideoSet } from "../actions";
+import displays from "../reducers/displays";
 import BlurSelector from "./BlurSelector";
 import VideoSelector from "./VideoSelector";
 
-const SetDetail = ({ videosets, setTitleToVideoSet, removeFromVideoSets }) => {
+const SetDetail = ({ displays, videosets, setTitleToVideoSet, removeFromVideoSets }) => {
   let videoset = videosets.find(videoset => videoset.selected == true)
   const [header, setHeader] = useState(videoset ? videoset.setTitle: '')
 
@@ -23,9 +24,9 @@ const SetDetail = ({ videosets, setTitleToVideoSet, removeFromVideoSets }) => {
       {videoset && <div className="details">
         <input type="text" value={header} className="title title-input" onChange={updateHeader}/>
         <div className="columns">
-          <VideoSelector box="0"/>
-          {/* <VideoSelector box="1"/>
-          <VideoSelector box="2"/> */}
+          <VideoSelector box="0" display={displays[0]} />
+          <VideoSelector box="1" display={displays[1]} />
+          <VideoSelector box="2" display={displays[2]} />
         </div>
         <BlurSelector />
         <span 
@@ -40,7 +41,8 @@ const SetDetail = ({ videosets, setTitleToVideoSet, removeFromVideoSets }) => {
 }
 
 const mapStateToProps = state => ({
-  videosets: state.videosets
+  videosets: state.videosets,
+  displays: state.displays
 })
 
 const mapDispatchToProps = dispatch => ({

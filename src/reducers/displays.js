@@ -27,11 +27,13 @@ const displays = (state = getDisplaysIPs(), action) => {
     case SET_DISPLAYS_IPS:
       saveToLocalStorage(action.displays)
       return action.displays;
+    
     case SET_SAVED_DISPLAYS:
       let displays = [...state]
       return displays.map(display => ({
-        ...display, saved: display.ip == action.ip ? action.saved : display.saved
+        ...display, saved: display.ip === action.ip ? action.saved : display.saved
       }))
+    
     default:
       return state;
   }

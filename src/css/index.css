@@ -116,3 +116,11 @@ input[type="range"] {
   border-radius: 50%;
  }
  
+ .file-name {
+   width: 100%;
+   display: block;
+ }
+
+ .file-label{
+  width: 100%;
+ }

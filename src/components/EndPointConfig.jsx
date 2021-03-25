@@ -18,12 +18,14 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
   }
   
   const checkIP = (displayName, displayArray, displayCallBack) => {
+    const index = displayArray.map(display => display.ip).indexOf(displayName)
+    console.log('index:',index)
     axios.get(`http://${displayName}`, {timeout: 2000})
     .then(resp => {
       console.log(resp.data);
       displayCallBack([
         ...displayArray.map(display => {
-          if(displayArray.indexOf(display) === 0 ) return {...display, enabled: true}; 
+          if(displayArray.indexOf(display) === index ) return {...display, enabled: true}; 
           else return display;
         })
       ])
@@ -32,7 +34,7 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
       console.log(err);
       displayCallBack([
         ...displayArray.map(display => {
-          if(displayArray.indexOf(display) === 0 ) return {...display, enabled: false}; 
+          if(displayArray.indexOf(display) === index ) return {...display, enabled: false}; 
           else return display;
         })
       ])

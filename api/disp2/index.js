@@ -136,10 +136,10 @@ app.get('/api/stop', (req,res) => {
     console.log(stdout)
     console.log(stderr)
   })
-  res.send('stoped')
+  res.send('stopped')
 })
 
 
 
-port = 9999
+port = 20000
 app.listen(port, () => console.log('...listening on ' + port))
