@@ -25,7 +25,13 @@ const SetCard = ({ setInfo, selectVideoSet }) => {
   )
 }
 
+const mapStateToProps = state => ({
+  videosets: state.videosets,
+  displays: state.displays
+})
+
 const mapDispatchToProps = dispatch => ({
   selectVideoSet: id => dispatch(selectVideoSet(id))
 })
-export default connect(null, mapDispatchToProps)(SetCard);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetCard);

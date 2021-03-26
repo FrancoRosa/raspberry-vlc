@@ -11,9 +11,9 @@ const VideoSelector = ({
   setVideoToVideoSet,
   selectedVideo
 }) => {
-  const [path, setPath] = useState(selectedVideo ? URL.createObjectURL(selectedVideo) : '');
-  const [name, setName] = useState(selectedVideo.name);
-  const [file, setFile] = useState(selectedVideo);
+  const [path, setPath] = useState(selectedVideo[0]);
+  const [name, setName] = useState(selectedVideo[1]);
+  const [file, setFile] = useState();
   const [exists, setExists] = useState(false);
   const {ip, saved, enabled} = display
 
@@ -24,7 +24,8 @@ const VideoSelector = ({
     setFile(path)
     setPath(localPath)
     setName(localName)
-    setVideoToVideoSet(box,path)
+    console.log(path)
+    setVideoToVideoSet(box,[localPath, localName])
   }
 
   const processVideo = event => {
@@ -68,9 +69,9 @@ const VideoSelector = ({
   },[name])
 
   useEffect(()=>{
-    setFile(selectedVideo)
-    setPath(selectedVideo ? URL.createObjectURL(selectedVideo) : '')
-    setName(selectedVideo.name)
+    setFile()
+    setPath(selectedVideo ? selectedVideo[0] : '')
+    setName(selectedVideo ? selectedVideo[1] : '')
   },[selectedVideo])
 
   return (
@@ -78,7 +79,7 @@ const VideoSelector = ({
       <div className="card-image">
         <ReactPlayer
           url={path}
-          playing={true}
+          playing={false}
           controls
           width='100%'
           height='50vh'

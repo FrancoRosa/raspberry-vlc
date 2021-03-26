@@ -21,16 +21,22 @@ const getVideoSets = () => {
         selected: true
       },
     ];
-    localStorage.setItem("videosets", JSON.stringify(videosets))
+    saveToLocalStorage(videosets);
     return videosets;
   }
 }
 
+const saveToLocalStorage = videosets => {
+  localStorage.setItem("videosets", JSON.stringify(videosets))
+}
+
 const videosets = (state = getVideoSets(), action) => {
+  let newState;
   switch (action.type) {
+    
     case ADD_TO_VIDEOSETS:
       const videosets = state.map(videoset => ({...videoset, selected: false}))
-      return [
+      newState = [
         ...videosets, {
           id: Date.now(),
           setTitle: 'New video set',
@@ -39,6 +45,8 @@ const videosets = (state = getVideoSets(), action) => {
           selected: true
         }
       ];
+      saveToLocalStorage(newState);
+      return newState
 
     case REMOVE_FROM_VIDEOSETS:
       let sets = [...state]
@@ -50,48 +58,58 @@ const videosets = (state = getVideoSets(), action) => {
             found = true;
           }
         });
-        return [
+        newState = [
           ...sets.filter(videoset => videoset.id !== action.id),
         ];
+        saveToLocalStorage(newState)
+        return newState
       }
       return state
 
     case SELECT_VIDEOSET:
-      return [
+      newState = [
         ...state.map(videoset => ({
           ...videoset, selected: videoset.id == action.id ? true : false
         }))
       ]
+      saveToLocalStorage(newState)
+      return newState
 
     case SET_TITLE_TO_VIDEOSET:
-      return [
+      newState = [
         ...state.map(videoset => ({
           ...videoset, setTitle: videoset.id == action.id ? action.title : videoset.setTitle
         }))
       ]
+      saveToLocalStorage(newState)
+      return newState
 
     case SET_VIDEO_TO_VIDEOSET:
       const selectedVideoset = state.filter(videoset => videoset.selected == true)[0]
       selectedVideoset.videos[action.index]=action.video
       const videosetVideos = selectedVideoset.videos;
 
-      return [
+      newState = [
         ...state.map(videoset => ({
           ...videoset, videos: videoset.selected == true ? videosetVideos : videoset.videos
         }))
       ]
+      saveToLocalStorage(newState)
+      return newState
 
     case SET_BLUR_TO_VIDEOSET:
       const selVideoset = state.filter(videoset => videoset.selected == true)[0]
       selVideoset.blur=action.blur
       const videosetBlur = selVideoset.blur;
 
-      return [
+      newState = [
         ...state.map(videoset => ({
           ...videoset, blur: videoset.selected == true ? videosetBlur : videoset.blur
         }))
       ]
-
+      saveToLocalStorage(newState)
+      return newState
+      
     default:
       return state;
   }
