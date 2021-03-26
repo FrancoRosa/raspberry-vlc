@@ -2,8 +2,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
+import { setSavedDisplays } from '../actions';
 
-const VideoSelector = ({ box, display }) => {
+const VideoSelector = ({ box, display, setSavedDisplays }) => {
   const [path, setPath] = useState('');
   const [name, setName] = useState('');
   const [file, setFile] = useState();
@@ -18,21 +19,34 @@ const VideoSelector = ({ box, display }) => {
     setName(localName)
   }
 
-  const processVideo = () => {
+  const processVideo = event => {
     let formData = new FormData();
     formData.append('sampleFile', file)
     const url = `http://${ip}/api/videos`
     if (enabled && exists) {
-      axios.delete(url, name)
-      console.log('... delete video')
+      event.target.classList.add('is-loading');
+      axios.delete(url + '/' + name)
+      .then(() => {
+        let index = saved.indexOf(name);
+        saved.splice(index,1);
+        setSavedDisplays(ip, saved);
+        setPath('');
+        setName('');
+        event.target.classList.remove('is-loading');
+      })
     }
     if (enabled && !exists) {
+      event.target.classList.add('is-loading');
       axios.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
+      }).then(() => {
+        saved.push(name);
+        setSavedDisplays(ip, saved);
+        setExists(true);
+        event.target.classList.remove('is-loading');
       })
-      console.log('... upload video')
     }
   }
 
@@ -90,4 +104,8 @@ const VideoSelector = ({ box, display }) => {
   )
 }
 
-export default VideoSelector;
+const mapDispatchToProps = dispatch => ({
+  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved))
+})
+
+export default connect(null, mapDispatchToProps)(VideoSelector);

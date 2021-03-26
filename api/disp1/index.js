@@ -34,11 +34,6 @@ const writeConfigFile = () => {
 }
 
 readConfigFile()
-// TO DO:
-// - See files available
-// - A file update adds a new entry on db
-// - Upload if the file don't exists
-// - Get video configuration
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -54,6 +49,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/videos', (req,res) => {
+  readConfigFile()
   console.log('... get to \'/api/videos\'')
   res.send(config)
 })
@@ -70,22 +66,23 @@ app.put('/api/videos/:id', (req, res) => {
 
 app.get('/api/videos/:id', (req,res) => {
   console.log('... get to \'/api/videos/:id\'')
-  const video = config.find(video => video.id===req.params.id) 
+  const video = video[video.indexOf(req.params.id)]
   if (!video) res.status(404).send('not found')
   res.send(video);
 })
 
 app.delete('/api/videos/:id', (req, res) => {
   console.log('... delete to \'/api/videos/:id\'')
-  const video = config.find(video => video.id === req.params.id) 
+  const video = config[config.indexOf(req.params.id)] 
   if (!video) res.status(404).send('not found')
-  const index = config.indexOf(video).features
+  const index = config.indexOf(video)
   config.splice(index, 1)
   fs.rm(__dirname+'/uploaded/'+req.params.id,err=>{
     if (err) console.log('... file can not be removed');
     else console.log('... file removed!')
   })
   res.send(video);
+  writeConfigFile();
 })
 
 app.post('/api/videos', (req, res) => {

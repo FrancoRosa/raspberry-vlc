@@ -17,6 +17,10 @@
 /build
 
 # misc
+*.mp4
+*.mkv
+
+.vscode
 .DS_Store
 .env.local
 .env.development.local

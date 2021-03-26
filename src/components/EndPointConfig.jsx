@@ -68,6 +68,15 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
     getSavedVideos(sc3, setSavedDisplays);
   }, [sc3])
 
+  useEffect(()=>{
+    checkIP(sc1, displays, setDisplays);
+    getSavedVideos(sc1, setSavedDisplays);
+    checkIP(sc2, displays, setDisplays)
+    getSavedVideos(sc2, setSavedDisplays);
+    checkIP(sc3, displays, setDisplays)
+    getSavedVideos(sc3, setSavedDisplays);
+  }, [])
+
   
   return (
     <div className='card endpoint'>
