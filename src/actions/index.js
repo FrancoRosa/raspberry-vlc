@@ -1,6 +1,7 @@
 export const SELECT_VIDEOSET = 'SELECT_VIDEOSET';
 export const SET_TITLE_TO_VIDEOSET = 'SET_TITLE_TO_VIDEOSET';
 export const SET_VIDEO_TO_VIDEOSET = 'SET_VIDEO_TO_VIDEOSET';
+export const SET_BLUR_TO_VIDEOSET = 'SET_BLUR_TO_VIDEOSET';
 export const ADD_TO_VIDEOSETS = 'ADD_TO_VIDEOSETS';
 export const REMOVE_FROM_VIDEOSETS = 'REMOVE_FROM_VIDEOSETS';
 export const SET_DISPLAYS_IPS = 'SET_DISPLAYS_IPS';
@@ -28,6 +29,14 @@ export const setVideoToVideoSet = (index, video) => (
     type: SET_VIDEO_TO_VIDEOSET,
   }
 );
+
+export const setBlurToVideoSet = (blur) => (
+  {
+    blur,
+    type: SET_BLUR_TO_VIDEOSET,
+  }
+);
+
 
 export const addToVideoSets = () => (
   {

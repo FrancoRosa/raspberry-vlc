@@ -4,6 +4,7 @@ import {
   SELECT_VIDEOSET,
   SET_TITLE_TO_VIDEOSET,
   SET_VIDEO_TO_VIDEOSET,
+  SET_BLUR_TO_VIDEOSET,
 } from '../actions/index';
 
 const getVideoSets = () => {
@@ -77,6 +78,17 @@ const videosets = (state = getVideoSets(), action) => {
       return [
         ...state.map(videoset => ({
           ...videoset, videos: videoset.selected == true ? videosetVideos : videoset.videos
+        }))
+      ]
+
+    case SET_BLUR_TO_VIDEOSET:
+      const selVideoset = state.filter(videoset => videoset.selected == true)[0]
+      selVideoset.blur=action.blur
+      const videosetBlur = selVideoset.blur;
+
+      return [
+        ...state.map(videoset => ({
+          ...videoset, blur: videoset.selected == true ? videosetBlur : videoset.blur
         }))
       ]
 
