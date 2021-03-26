@@ -2,10 +2,19 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
-import { setSavedDisplays } from '../actions';
+import { setSavedDisplays, setVideoToVideoSet} from '../actions';
+import videoset from '../reducers/videosets';
 
-const VideoSelector = ({ box, display, setSavedDisplays }) => {
-  const [path, setPath] = useState('');
+const VideoSelector = ({
+  box,
+  display,
+  setSavedDisplays,
+  setVideoToVideoSet,
+  id,
+  videosets
+}) => {
+  let videoset = videosets.filter(videoset => videoset.id == id)
+  const [path, setPath] = useState(videoset[box]);
   const [name, setName] = useState('');
   const [file, setFile] = useState();
   const [exists, setExists] = useState(false);
@@ -17,6 +26,10 @@ const VideoSelector = ({ box, display, setSavedDisplays }) => {
     setFile(e.target.files[0])
     setPath(localPath)
     setName(localName)
+    console.log("id:",id)
+    console.log("box:",box)
+    console.log("localpath:",localPath)
+    setVideoToVideoSet(id,box,localPath)
   }
 
   const processVideo = event => {
@@ -60,6 +73,9 @@ const VideoSelector = ({ box, display, setSavedDisplays }) => {
     setExists(saved.includes(name))
   },[name])
 
+  useEffect(()=>{
+    videoset = videosets.filter(videoset => videoset.id == id)
+  },[videosets])
 
   return (
     <div className="card column is-one-third videoselector">
@@ -105,7 +121,11 @@ const VideoSelector = ({ box, display, setSavedDisplays }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved))
+  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved)),
+  setVideoToVideoSet: (id, index, video) => dispatch(setVideoToVideoSet(id, index, video))
 })
 
-export default connect(null, mapDispatchToProps)(VideoSelector);
+const mapStateToProps = state => ({
+  videosets: state.videosets
+})
+export default connect(mapStateToProps, mapDispatchToProps)(VideoSelector);

@@ -3,6 +3,7 @@ import {
   REMOVE_FROM_VIDEOSETS,
   SELECT_VIDEOSET,
   SET_TITLE_TO_VIDEOSET,
+  SET_VIDEO_TO_VIDEOSET,
 } from '../actions/index';
 
 const getVideoSets = () => {
@@ -14,12 +15,7 @@ const getVideoSets = () => {
       {
         id: Date.now(),
         setTitle: 'New video set',
-        v1: '',
-        v1_uploaded: false,
-        v2: '',
-        v2_uploaded: false,
-        v3: '',
-        v3_uploaded: false,
+        videos: ['','',''],
         blur: 0,
         selected: true
       },
@@ -36,16 +32,12 @@ const videoset = (state = getVideoSets(), action) => {
         ...state, {
           id: Date.now(),
           setTitle: 'New video set',
-          v1: '',
-          v1_uploaded: false,
-          v2: '',
-          v2_uploaded: false,
-          v3: '',
-          v3_uploaded: false,
+          videos: ['','',''],
           blur: 0,
           selected: false
         }
       ];
+
     case REMOVE_FROM_VIDEOSETS:
       if (state.length > 1) {
         return [
@@ -53,18 +45,34 @@ const videoset = (state = getVideoSets(), action) => {
         ];
       }
       return state
+
     case SELECT_VIDEOSET:
       return [
         ...state.map(videoset => ({
           ...videoset, selected: videoset.id == action.id ? true : false
         }))
       ]
+
     case SET_TITLE_TO_VIDEOSET:
       return [
         ...state.map(videoset => ({
           ...videoset, setTitle: videoset.id == action.id ? action.title : videoset.setTitle
         }))
       ]
+
+    case SET_VIDEO_TO_VIDEOSET:
+      const selectedVideoset = state.filter(videoset => videoset.id == action.id)[0]
+      console.log("action id",action.id)
+      console.log("selected videoset",selectedVideoset)
+      selectedVideoset.videos[action.index]=action.video
+      const videosetVideos = selectedVideoset.videos;
+
+      return [
+        ...state.map(videoset => ({
+          ...videoset, videos: videoset.id == action.id ? videosetVideos : videoset.videos
+        }))
+      ]
+
     default:
       return state;
   }

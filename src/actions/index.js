@@ -1,5 +1,6 @@
 export const SELECT_VIDEOSET = 'SELECT_VIDEOSET';
 export const SET_TITLE_TO_VIDEOSET = 'SET_TITLE_TO_VIDEOSET';
+export const SET_VIDEO_TO_VIDEOSET = 'SET_VIDEO_TO_VIDEOSET';
 export const ADD_TO_VIDEOSETS = 'ADD_TO_VIDEOSETS';
 export const REMOVE_FROM_VIDEOSETS = 'REMOVE_FROM_VIDEOSETS';
 export const SET_DISPLAYS_IPS = 'SET_DISPLAYS_IPS';
@@ -17,6 +18,15 @@ export const setTitleToVideoSet = (id, title) => (
     id,
     title,
     type: SET_TITLE_TO_VIDEOSET,
+  }
+);
+
+export const setVideoToVideoSet = (id, index, video) => (
+  {
+    id,
+    index,
+    video,
+    type: SET_VIDEO_TO_VIDEOSET,
   }
 );
 
