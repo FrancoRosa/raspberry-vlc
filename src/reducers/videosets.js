@@ -25,7 +25,7 @@ const getVideoSets = () => {
   }
 }
 
-const videoset = (state = getVideoSets(), action) => {
+const videosets = (state = getVideoSets(), action) => {
   switch (action.type) {
     case ADD_TO_VIDEOSETS:
       const videosets = state.map(videoset => ({...videoset, selected: false}))
@@ -70,15 +70,13 @@ const videoset = (state = getVideoSets(), action) => {
       ]
 
     case SET_VIDEO_TO_VIDEOSET:
-      const selectedVideoset = state.filter(videoset => videoset.id == action.id)[0]
-      console.log("action id",action.id)
-      console.log("selected videoset",selectedVideoset)
+      const selectedVideoset = state.filter(videoset => videoset.selected == true)[0]
       selectedVideoset.videos[action.index]=action.video
       const videosetVideos = selectedVideoset.videos;
 
       return [
         ...state.map(videoset => ({
-          ...videoset, videos: videoset.id == action.id ? videosetVideos : videoset.videos
+          ...videoset, videos: videoset.selected == true ? videosetVideos : videoset.videos
         }))
       ]
 
@@ -87,4 +85,4 @@ const videoset = (state = getVideoSets(), action) => {
   }
 };
 
-export default videoset;
+export default videosets;

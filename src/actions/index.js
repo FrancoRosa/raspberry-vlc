@@ -21,9 +21,8 @@ export const setTitleToVideoSet = (id, title) => (
   }
 );
 
-export const setVideoToVideoSet = (id, index, video) => (
+export const setVideoToVideoSet = (index, video) => (
   {
-    id,
     index,
     video,
     type: SET_VIDEO_TO_VIDEOSET,

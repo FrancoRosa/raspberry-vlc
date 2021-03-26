@@ -11,9 +11,6 @@ const SetCard = ({ setInfo, selectVideoSet }) => {
     console.log('... stop');
   }
 
-  const activateSet = () => {
-    console.log('... activateSet')
-  }
   return(
     <a 
       className={`panel-block ${selected ? 'is-active' : ''}`}

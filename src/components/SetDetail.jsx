@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { removeFromVideoSets, setTitleToVideoSet } from "../actions";
-import displays from "../reducers/displays";
 import BlurSelector from "./BlurSelector";
 import VideoSelector from "./VideoSelector";
 
@@ -21,9 +20,9 @@ const SetDetail = ({ displays, videosets, setTitleToVideoSet, removeFromVideoSet
     videoset = videosets.find(videoset => videoset.selected === true);
     setHeader(videoset ? videoset.setTitle: '');
     setVids(videoset.videos ? videoset.videos: []);
-    setVideosetId(videoset ? videoset.id: '');
-    console.log('videoset => ', videoset.id)
   },[videosets])
+
+  useEffect(() => {setVideosetId(videoset ? videoset.id: '');},[header])
 
   return (
     <div>

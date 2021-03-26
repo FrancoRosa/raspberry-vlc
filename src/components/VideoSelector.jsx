@@ -9,14 +9,12 @@ const VideoSelector = ({
   display,
   setSavedDisplays,
   setVideoToVideoSet,
-  setid,
   selectedVideo
 }) => {
-  const [path, setPath] = useState(selectedVideo);
-  const [name, setName] = useState('');
-  const [file, setFile] = useState();
+  const [path, setPath] = useState(selectedVideo ? URL.createObjectURL(selectedVideo) : '');
+  const [name, setName] = useState(selectedVideo.name);
+  const [file, setFile] = useState(selectedVideo);
   const [exists, setExists] = useState(false);
-  const [videosetId, setVideosetId] = useState(setid);
   const {ip, saved, enabled} = display
 
   const handleFiles = e => {
@@ -26,8 +24,7 @@ const VideoSelector = ({
     setFile(path)
     setPath(localPath)
     setName(localName)
-    console.log('==> videoSetID', videosetId)
-    setVideoToVideoSet(videosetId,box,localPath)
+    setVideoToVideoSet(box,path)
   }
 
   const processVideo = event => {
@@ -67,17 +64,14 @@ const VideoSelector = ({
   },[])
 
   useEffect(()=>{
-    console.log('exists',saved.includes(name))
     setExists(saved.includes(name))
   },[name])
 
   useEffect(()=>{
-    setPath(selectedVideo)
+    setFile(selectedVideo)
+    setPath(selectedVideo ? URL.createObjectURL(selectedVideo) : '')
+    setName(selectedVideo.name)
   },[selectedVideo])
-
-  useEffect(()=>{
-    setVideosetId(setid)
-  },[setid])
 
   return (
     <div className="card column is-one-third videoselector">
@@ -124,7 +118,7 @@ const VideoSelector = ({
 
 const mapDispatchToProps = dispatch => ({
   setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved)),
-  setVideoToVideoSet: (id, index, video) => dispatch(setVideoToVideoSet(id, index, video))
+  setVideoToVideoSet: (index, video) => dispatch(setVideoToVideoSet(index, video))
 })
 
 export default connect(null, mapDispatchToProps)(VideoSelector);
