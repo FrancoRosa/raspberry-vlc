@@ -3,33 +3,31 @@ import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
 import { setSavedDisplays, setVideoToVideoSet} from '../actions';
-import videoset from '../reducers/videosets';
 
 const VideoSelector = ({
   box,
   display,
   setSavedDisplays,
   setVideoToVideoSet,
-  id,
-  videosets
+  setid,
+  selectedVideo
 }) => {
-  let videoset = videosets.filter(videoset => videoset.id == id)
-  const [path, setPath] = useState(videoset[box]);
+  const [path, setPath] = useState(selectedVideo);
   const [name, setName] = useState('');
   const [file, setFile] = useState();
   const [exists, setExists] = useState(false);
+  const [videosetId, setVideosetId] = useState(setid);
   const {ip, saved, enabled} = display
 
   const handleFiles = e => {
-    let localPath = URL.createObjectURL(e.target.files[0]);
-    let localName = e.target.files[0].name
-    setFile(e.target.files[0])
+    let path = e.target.files[0]
+    let localPath = URL.createObjectURL(path);
+    let localName = path.name
+    setFile(path)
     setPath(localPath)
     setName(localName)
-    console.log("id:",id)
-    console.log("box:",box)
-    console.log("localpath:",localPath)
-    setVideoToVideoSet(id,box,localPath)
+    console.log('==> videoSetID', videosetId)
+    setVideoToVideoSet(videosetId,box,localPath)
   }
 
   const processVideo = event => {
@@ -74,8 +72,12 @@ const VideoSelector = ({
   },[name])
 
   useEffect(()=>{
-    videoset = videosets.filter(videoset => videoset.id == id)
-  },[videosets])
+    setPath(selectedVideo)
+  },[selectedVideo])
+
+  useEffect(()=>{
+    setVideosetId(setid)
+  },[setid])
 
   return (
     <div className="card column is-one-third videoselector">
@@ -125,7 +127,4 @@ const mapDispatchToProps = dispatch => ({
   setVideoToVideoSet: (id, index, video) => dispatch(setVideoToVideoSet(id, index, video))
 })
 
-const mapStateToProps = state => ({
-  videosets: state.videosets
-})
-export default connect(mapStateToProps, mapDispatchToProps)(VideoSelector);
+export default connect(null, mapDispatchToProps)(VideoSelector);

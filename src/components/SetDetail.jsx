@@ -8,7 +8,9 @@ import VideoSelector from "./VideoSelector";
 const SetDetail = ({ displays, videosets, setTitleToVideoSet, removeFromVideoSets }) => {
   let videoset = videosets.find(videoset => videoset.selected == true)
   const [header, setHeader] = useState(videoset ? videoset.setTitle: '')
-  const [id, setId] = useState(videoset ? videoset.id: '')
+  const [videosetId, setVideosetId] = useState(videoset ? videoset.id: '')
+  const [vids, setVids] = useState(videoset.videos ? videoset.videos: [])
+
 
   const updateHeader = e => {
     setHeader(e.target.value);
@@ -16,9 +18,11 @@ const SetDetail = ({ displays, videosets, setTitleToVideoSet, removeFromVideoSet
   }
   
   useEffect(()=>{
-    videoset = videosets.find(videoset => videoset.selected === true)
-    setHeader(videoset ? videoset.setTitle: '')
-    setId(videoset ? videoset.id: '')
+    videoset = videosets.find(videoset => videoset.selected === true);
+    setHeader(videoset ? videoset.setTitle: '');
+    setVids(videoset.videos ? videoset.videos: []);
+    setVideosetId(videoset ? videoset.id: '');
+    console.log('videoset => ', videoset.id)
   },[videosets])
 
   return (
@@ -26,9 +30,9 @@ const SetDetail = ({ displays, videosets, setTitleToVideoSet, removeFromVideoSet
       {videoset && <div className="details">
         <input type="text" value={header} className="title title-input" onChange={updateHeader}/>
         <div className="columns">
-          <VideoSelector id={id} box="0" display={displays[0]} />
-          <VideoSelector id={id} box="1" display={displays[1]} />
-          <VideoSelector id={id} box="2" display={displays[2]} />
+          <VideoSelector selectedVideo={vids[0]} setid={videosetId} box="0" display={displays[0]} />
+          <VideoSelector selectedVideo={vids[1]} setid={videosetId} box="1" display={displays[1]} />
+          <VideoSelector selectedVideo={vids[2]} setid={videosetId} box="2" display={displays[2]} />
         </div>
         <BlurSelector />
         <span 

@@ -28,20 +28,29 @@ const getVideoSets = () => {
 const videoset = (state = getVideoSets(), action) => {
   switch (action.type) {
     case ADD_TO_VIDEOSETS:
+      const videosets = state.map(videoset => ({...videoset, selected: false}))
       return [
-        ...state, {
+        ...videosets, {
           id: Date.now(),
           setTitle: 'New video set',
           videos: ['','',''],
           blur: 0,
-          selected: false
+          selected: true
         }
       ];
 
     case REMOVE_FROM_VIDEOSETS:
-      if (state.length > 1) {
+      let sets = [...state]
+      if (sets.length > 1) {
+        let found = false
+        sets.forEach(videoset => {
+          if (!found && videoset.id != action.id) {
+            videoset.selected = true
+            found = true;
+          }
+        });
         return [
-          ...state.filter(videoset => videoset.id !== action.id),
+          ...sets.filter(videoset => videoset.id !== action.id),
         ];
       }
       return state
