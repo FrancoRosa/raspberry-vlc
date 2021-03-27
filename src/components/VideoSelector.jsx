@@ -13,7 +13,7 @@ const VideoSelector = ({
 }) => {
   const [path, setPath] = useState(selectedVideo[0]);
   const [name, setName] = useState(selectedVideo[1]);
-  const [file, setFile] = useState();
+  const [file, setFile] = useState('');
   const [exists, setExists] = useState(false);
   const {ip, saved, enabled} = display
 
@@ -24,11 +24,6 @@ const VideoSelector = ({
     setFile(e.target.files[0])
     setPath(localPath)
     setName(localName)
-    console.log('>>>>>>>>')
-    console.log(path)
-    console.log(localPath)
-    console.log(localName)
-    console.log('>>>>>>>>')
     setVideoToVideoSet(box,[localPath, localName])
   }
 
@@ -53,6 +48,9 @@ const VideoSelector = ({
     if (enabled && !exists) {
       let formData = new FormData();
       formData.append('sampleFile', file)
+      console.log('___ FILE ___')
+      console.log(file)
+      console.log('________________')
       event.target.classList.add('is-loading');
       axios.post(url, formData, {
         headers: {
@@ -80,7 +78,6 @@ const VideoSelector = ({
   },[name])
 
   useEffect(()=>{
-    setFile()
     setPath(selectedVideo ? selectedVideo[0] : '')
     setName(selectedVideo ? selectedVideo[1] : '')
   },[selectedVideo])
@@ -90,7 +87,7 @@ const VideoSelector = ({
       <div className="card-image">
         <ReactPlayer
           url={path}
-          playing={false}
+          playing={true}
           controls
           width='100%'
           height='50vh'
