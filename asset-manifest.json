@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/raspberry-vlc/static/css/main.95078a91.chunk.css",
+    "main.js": "/raspberry-vlc/static/js/main.f503b661.chunk.js",
+    "main.js.map": "/raspberry-vlc/static/js/main.f503b661.chunk.js.map",
+    "runtime-main.js": "/raspberry-vlc/static/js/runtime-main.783f2bf1.js",
+    "runtime-main.js.map": "/raspberry-vlc/static/js/runtime-main.783f2bf1.js.map",
+    "static/js/2.b0067a24.chunk.js": "/raspberry-vlc/static/js/2.b0067a24.chunk.js",
+    "static/js/2.b0067a24.chunk.js.map": "/raspberry-vlc/static/js/2.b0067a24.chunk.js.map",
+    "index.html": "/raspberry-vlc/index.html",
+    "static/css/main.95078a91.chunk.css.map": "/raspberry-vlc/static/css/main.95078a91.chunk.css.map",
+    "static/js/2.b0067a24.chunk.js.LICENSE.txt": "/raspberry-vlc/static/js/2.b0067a24.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.783f2bf1.js",
+    "static/js/2.b0067a24.chunk.js",
+    "static/css/main.95078a91.chunk.css",
+    "static/js/main.f503b661.chunk.js"
+  ]
+}
