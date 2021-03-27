@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { setDisplays, setSavedDisplays, setStatusToDisplays } from '../actions';
+import { setDisplays, setStatusToDisplays } from '../actions';
 
 const EndPointConfig = ({
   displays,
   setDisplays,
-  setSavedDisplays,
   setStatusToDisplays,
 }) => {
   const [sc1, setSc1] = useState(displays[0].ip);
@@ -40,43 +39,26 @@ const EndPointConfig = ({
     })
   }
 
-  const getSavedVideos = (displayName, saveCallBack) => {
-    axios.get(`http://${displayName}/api/videos`, {timeout: 2000})
-    .then(resp => {
-      console.log(resp.data);
-      saveCallBack(displayName, resp.data)
-    })
-    .catch(err => {
-      console.log(err);
-      saveCallBack(displayName, [])
-    })
-  }
+  
 
   useEffect(()=>{
     checkIP(sc1,setSc1status, setStatusToDisplays);
-    getSavedVideos(sc1, setSavedDisplays);
   }, [sc1])
 
   useEffect(()=>{
     checkIP(sc2, setSc2status, setStatusToDisplays)
-    getSavedVideos(sc2, setSavedDisplays);
   }, [sc2])
   
   useEffect(()=>{
     checkIP(sc3, setSc3status, setStatusToDisplays)
-    getSavedVideos(sc3, setSavedDisplays);
   }, [sc3])
 
   useEffect(()=>{
     checkIP(sc1, setSc1status, setStatusToDisplays);
-    getSavedVideos(sc1, setSavedDisplays);
     checkIP(sc2, setSc2status, setStatusToDisplays)
-    getSavedVideos(sc2, setSavedDisplays);
     checkIP(sc3, setSc3status, setStatusToDisplays)
-    getSavedVideos(sc3, setSavedDisplays);
   }, [])
 
-  
   return (
     <div className='card endpoint'>
       <div className="field">
@@ -113,7 +95,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setDisplays: displays => dispatch(setDisplays(displays)),
-  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved)),
   setStatusToDisplays: (ip, status) => dispatch(setStatusToDisplays(ip, status)),
 })
 

@@ -9,11 +9,11 @@ const SetCard = ({ setInfo, selectVideoSet, videosets, displays }) => {
     let url = '';
     let videoset = videosets.filter(videoset => videoset.selected)[0]
     url = `http://${displays[0].ip}/api/play`;
-    axios.post(url,{video: videoset.videos[0], blur: videoset.blur})
+    axios.post(url,{video: videoset.videos[0][1], blur: videoset.blur})
     url = `http://${displays[1].ip}/api/play`;
-    axios.post(url,{video: videoset.videos[0], blur: 2*videoset.blur})
+    axios.post(url,{video: videoset.videos[1][1], blur: 2*videoset.blur})
     url = `http://${displays[2].ip}/api/play`;
-    axios.post(url,{video: videoset.videos[0], blur: 2*videoset.blur})
+    axios.post(url,{video: videoset.videos[2][1], blur: 2*videoset.blur})
   }
 
   const stopSet = () => {

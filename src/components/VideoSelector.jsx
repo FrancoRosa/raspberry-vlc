@@ -7,7 +7,6 @@ import { setSavedDisplays, setVideoToVideoSet} from '../actions';
 const VideoSelector = ({
   box,
   display,
-  setSavedDisplays,
   setVideoToVideoSet,
   selectedVideo,
 }) => {
@@ -15,7 +14,20 @@ const VideoSelector = ({
   const [name, setName] = useState(selectedVideo[1]);
   const [file, setFile] = useState('');
   const [exists, setExists] = useState(false);
-  const {ip, saved, enabled} = display
+  const {ip, enabled} = display
+  const [saved, setSaved] = useState([])
+
+  const getSavedVideos = (displayName, saveCallBack) => {
+    axios.get(`http://${displayName}/api/videos`, {timeout: 2000})
+    .then(resp => {
+      saveCallBack(resp.data)
+      setExists(resp.data.includes(name))
+    })
+    .catch(err => {
+      saveCallBack([])
+      setExists(false)
+    })
+  }
 
   const handleFiles = e => {
     let path = e.target.files[0]
@@ -28,15 +40,15 @@ const VideoSelector = ({
   }
 
   const processVideo = event => {
-    
     const url = `http://${ip}/api/videos`
     if (enabled && exists) {
       event.target.classList.add('is-loading');
       axios.delete(url + '/' + name)
       .then(() => {
         let index = saved.indexOf(name);
-        saved.splice(index,1);
-        setSavedDisplays(ip, saved);
+        let savedvids = [...saved]
+        savedvids.splice(index, 1)
+        setSaved(savedvids);
         setPath('');
         setName('');
         event.target.classList.remove('is-loading');
@@ -57,8 +69,9 @@ const VideoSelector = ({
           'Content-Type': 'multipart/form-data'
         }
       }).then(() => {
-        saved.push(name);
-        setSavedDisplays(ip, saved);
+        let savedvids = [...saved]
+        savedvids.push(name);
+        setSaved(savedvids);
         setExists(true);
         event.target.classList.remove('is-loading');
       }, err => {
@@ -71,15 +84,18 @@ const VideoSelector = ({
   useEffect(()=>{
     const inputElement = document.querySelector(".videofile"+box);
     inputElement.addEventListener("change", handleFiles, false);
+    getSavedVideos(ip, setSaved)
   },[])
 
   useEffect(()=>{
+    getSavedVideos(ip, setSaved)
     setExists(saved.includes(name))
   },[name])
 
   useEffect(()=>{
     setPath(selectedVideo ? selectedVideo[0] : '')
     setName(selectedVideo ? selectedVideo[1] : '')
+    getSavedVideos(ip, setSaved)
   },[selectedVideo])
 
   return (
@@ -113,7 +129,7 @@ const VideoSelector = ({
             `button card-footer-item is-outlined ${(exists && name) ? 'is-danger': 'is-success'}`
           }
           onClick={processVideo}
-          disabled={(name && enabled) ? false : true}
+          disabled={((exists || file) && enabled) ? false : true}
         >
           {exists ? 'Delete' : 'Upload'}
         </button>
@@ -123,7 +139,6 @@ const VideoSelector = ({
 }
 
 const mapDispatchToProps = dispatch => ({
-  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved)),
   setVideoToVideoSet: (index, video) => dispatch(setVideoToVideoSet(index, video))
 })
 
