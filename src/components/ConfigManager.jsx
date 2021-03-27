@@ -24,7 +24,7 @@ const ConfigManager = ({ identifier }) => {
   } 
   
   const getVideos = () => {
-    const url=`http://${ip}:9999/api/videos`
+    const url=`https://${ip}:9999/api/videos`
     axios.get(url, {timeout: 1000})
       .then(resp => {
         console.log(resp.data);
@@ -38,7 +38,7 @@ const ConfigManager = ({ identifier }) => {
   
 
   const playVideos = () => {
-    const url=`http://${ip}:9999/api/videos/play`
+    const url=`https://${ip}:9999/api/videos/play`
     axios.get(url, {timeout: 1000})
       .then(resp => {
         console.log(resp.data)
@@ -49,7 +49,7 @@ const ConfigManager = ({ identifier }) => {
   }
 
   const stopVideos = () => {
-    const url=`http://${ip}:9999/api/videos/stop`
+    const url=`https://${ip}:9999/api/videos/stop`
     axios.get(url, {timeout: 1000})
       .then(resp => {
         console.log(resp.data)

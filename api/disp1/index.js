@@ -1,7 +1,6 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const https = require('https');
 const fs = require('fs');
 const { exec } = require('child_process');
 
@@ -149,8 +148,4 @@ app.get('/api/stop', (req,res) => {
 
 
 port = 10000
-https.createServer({
-  key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.cert')
-}, app)
-.listen(port, () => console.log('...listening on ' + port))
+app.listen(port, () => console.log('...listening on ' + port))
