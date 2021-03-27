@@ -1,6 +1,6 @@
 import { SET_DISPLAYS_IPS } from '../actions';
 import { SET_SAVED_DISPLAYS } from '../actions';
-
+import { SET_STATUS_TO_DISPLAYS } from '../actions';
 
 const getDisplaysIPs = () => {
   let displays = [
@@ -34,6 +34,12 @@ const displays = (state = getDisplaysIPs(), action) => {
         ...display, saved: display.ip === action.ip ? action.saved : display.saved
       }))
     
+    case SET_STATUS_TO_DISPLAYS:
+      let displayss = [...state]
+      return displayss.map(display => ({
+        ...display, enabled: display.ip === action.ip ? action.status : display.enabled
+      }))
+
     default:
       return state;
   }

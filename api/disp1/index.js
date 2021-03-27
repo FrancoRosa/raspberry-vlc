@@ -91,20 +91,27 @@ app.post('/api/videos', (req, res) => {
   let sampleFile;
   let uploadPath;
   let files;
-
+  
   fs.readdir(__dirname+'/uploaded', (err, data) => {
     files = data
+    console.log(files)
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send('No files were uploaded.');
     }
     if (files.includes(req.files.sampleFile.name)) {
         return res.status(200).send('File already uploaded');
     }
+    if (err) console.log(err)
   
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     sampleFile = req.files.sampleFile;
     uploadPath = __dirname + '/uploaded/' + sampleFile.name;
     config.push(sampleFile.name)
+    console.log(req)
+    console.log("sampleFile", sampleFile);
+    console.log("uploadPath", uploadPath);
+    console.log("files", files);
+    
     writeConfigFile();
     // Use the mv() method to place the file somewhere on your server
     sampleFile.mv(uploadPath, function(err) {
@@ -117,23 +124,24 @@ app.post('/api/videos', (req, res) => {
   
 });
 
-app.get('/api/play', (req,res) => {
+app.post('/api/play', (req,res) => {
   console.log('... get to \'/api/play\'')
-  exec('dir', (err, stdout, stderr) => {
-    console.log(err)
-    console.log(stdout)
-    console.log(stderr)
-  })
+  console.log(req.body)
+  // exec('dir', (err, stdout, stderr) => {
+  //   console.log(err)
+  //   console.log(stdout)
+  //   console.log(stderr)
+  // })
   res.send('paying')
 })
 
 app.get('/api/stop', (req,res) => {
-  console.log('... get to \'/api/stop\'')
-  exec('dir', (err, stdout, stderr) => {
-    console.log(err)
-    console.log(stdout)
-    console.log(stderr)
-  })
+  console.log('... post to \'/api/stop\'')
+  // exec('dir', (err, stdout, stderr) => {
+  //   console.log(err)
+  //   console.log(stdout)
+  //   console.log(stderr)
+  // })
   res.send('stopped')
 })
 

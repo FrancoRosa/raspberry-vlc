@@ -9,7 +9,7 @@ const VideoSelector = ({
   display,
   setSavedDisplays,
   setVideoToVideoSet,
-  selectedVideo
+  selectedVideo,
 }) => {
   const [path, setPath] = useState(selectedVideo[0]);
   const [name, setName] = useState(selectedVideo[1]);
@@ -21,16 +21,19 @@ const VideoSelector = ({
     let path = e.target.files[0]
     let localPath = URL.createObjectURL(path);
     let localName = path.name
-    setFile(path)
+    setFile(e.target.files[0])
     setPath(localPath)
     setName(localName)
+    console.log('>>>>>>>>')
     console.log(path)
+    console.log(localPath)
+    console.log(localName)
+    console.log('>>>>>>>>')
     setVideoToVideoSet(box,[localPath, localName])
   }
 
   const processVideo = event => {
-    let formData = new FormData();
-    formData.append('sampleFile', file)
+    
     const url = `http://${ip}/api/videos`
     if (enabled && exists) {
       event.target.classList.add('is-loading');
@@ -42,9 +45,14 @@ const VideoSelector = ({
         setPath('');
         setName('');
         event.target.classList.remove('is-loading');
+      },err => {
+        console.error(err);
+        event.target.classList.remove('is-loading');
       })
     }
     if (enabled && !exists) {
+      let formData = new FormData();
+      formData.append('sampleFile', file)
       event.target.classList.add('is-loading');
       axios.post(url, formData, {
         headers: {
@@ -54,6 +62,9 @@ const VideoSelector = ({
         saved.push(name);
         setSavedDisplays(ip, saved);
         setExists(true);
+        event.target.classList.remove('is-loading');
+      }, err => {
+        console.error(err)
         event.target.classList.remove('is-loading');
       })
     }
@@ -91,11 +102,8 @@ const VideoSelector = ({
           <label className="file-label">
             <input className={"file-input videofile"+box} type="file" name="resume"/>
             <span className="file-cta">
-              <span className="file-icon">
+              <span className="file-icon has-text-success">
                 <i className="fas fa-upload"></i>
-              </span>
-              <span className="file-label">
-                Select video
               </span>
             </span>
             <span className="file-name">

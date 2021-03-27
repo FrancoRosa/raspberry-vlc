@@ -1,13 +1,22 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { setDisplays, setSavedDisplays } from '../actions';
+import { setDisplays, setSavedDisplays, setStatusToDisplays } from '../actions';
 
-const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
+const EndPointConfig = ({
+  displays,
+  setDisplays,
+  setSavedDisplays,
+  setStatusToDisplays,
+}) => {
   const [sc1, setSc1] = useState(displays[0].ip);
   const [sc2, setSc2] = useState(displays[1].ip);
   const [sc3, setSc3] = useState(displays[2].ip);
   
+  const [sc1status, setSc1status] = useState(false);
+  const [sc2status, setSc2status] = useState(false);
+  const [sc3status, setSc3status] = useState(false);
+
   const updateDisplayIP = (index, ip) => {
     setDisplays([
       ...displays.map(display => {
@@ -17,27 +26,17 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
     ])
   }
   
-  const checkIP = (displayName, displayArray, displayCallBack) => {
-    const index = displayArray.map(display => display.ip).indexOf(displayName)
-    console.log('index:',index)
+  const checkIP = (displayName, displayCallBack, storeCallback) => {
     axios.get(`http://${displayName}`, {timeout: 2000})
     .then(resp => {
       console.log(resp.data);
-      displayCallBack([
-        ...displayArray.map(display => {
-          if(displayArray.indexOf(display) === index ) return {...display, enabled: true}; 
-          else return display;
-        })
-      ])
+      displayCallBack(true);
+      storeCallback(displayName, true);
     })
     .catch(err => {
       console.log(err);
-      displayCallBack([
-        ...displayArray.map(display => {
-          if(displayArray.indexOf(display) === index ) return {...display, enabled: false}; 
-          else return display;
-        })
-      ])
+      displayCallBack(false);
+      storeCallback(displayName, false);
     })
   }
 
@@ -54,26 +53,26 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
   }
 
   useEffect(()=>{
-    checkIP(sc1, displays, setDisplays);
+    checkIP(sc1,setSc1status, setStatusToDisplays);
     getSavedVideos(sc1, setSavedDisplays);
   }, [sc1])
 
   useEffect(()=>{
-    checkIP(sc2, displays, setDisplays)
+    checkIP(sc2, setSc2status, setStatusToDisplays)
     getSavedVideos(sc2, setSavedDisplays);
   }, [sc2])
   
   useEffect(()=>{
-    checkIP(sc3, displays, setDisplays)
+    checkIP(sc3, setSc3status, setStatusToDisplays)
     getSavedVideos(sc3, setSavedDisplays);
   }, [sc3])
 
   useEffect(()=>{
-    checkIP(sc1, displays, setDisplays);
+    checkIP(sc1, setSc1status, setStatusToDisplays);
     getSavedVideos(sc1, setSavedDisplays);
-    checkIP(sc2, displays, setDisplays)
+    checkIP(sc2, setSc2status, setStatusToDisplays)
     getSavedVideos(sc2, setSavedDisplays);
-    checkIP(sc3, displays, setDisplays)
+    checkIP(sc3, setSc3status, setStatusToDisplays)
     getSavedVideos(sc3, setSavedDisplays);
   }, [])
 
@@ -83,7 +82,7 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
       <div className="field">
         <label className="label is-small">Display 1:</label>
         <input 
-          className={`input is-small ${displays[0].enabled ? 'is-success' : 'is-danger'}`}
+          className={`input is-small ${sc1status ? 'is-success' : 'is-danger'}`}
           type="text" value={sc1} 
           onChange={e => {setSc1(e.target.value); updateDisplayIP(0, e.target.value)}}
         />
@@ -91,7 +90,7 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
       <div className="field">
         <label className="label is-small">Display 2:</label>
         <input 
-          className={`input is-small ${displays[1].enabled ? 'is-success' : 'is-danger'}`}
+          className={`input is-small ${sc2status ? 'is-success' : 'is-danger'}`}
           type="text" value={sc2} 
           onChange={e => {setSc2(e.target.value); updateDisplayIP(1, e.target.value)}}
         />
@@ -99,7 +98,7 @@ const EndPointConfig = ({ displays, setDisplays, setSavedDisplays }) => {
       <div className="field">
         <label className="label is-small">Display 3:</label>
         <input 
-          className={`input is-small ${displays[2].enabled ? 'is-success' : 'is-danger'}`}
+          className={`input is-small ${sc3status ? 'is-success' : 'is-danger'}`}
           type="text" value={sc3} 
           onChange={e => {setSc3(e.target.value); updateDisplayIP(2, e.target.value)}}
         />
@@ -114,7 +113,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setDisplays: displays => dispatch(setDisplays(displays)),
-  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved))
+  setSavedDisplays: (ip, saved) => dispatch(setSavedDisplays(ip, saved)),
+  setStatusToDisplays: (ip, status) => dispatch(setStatusToDisplays(ip, status)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EndPointConfig)
