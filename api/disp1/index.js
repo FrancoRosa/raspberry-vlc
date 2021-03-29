@@ -148,7 +148,7 @@ app.post('/api/play', (req,res) => {
     const blur_enabled = req.body.blur > 0 ? true : false
     process.env.VLC_FILE = vlc_file
     process.env.VLC_BLUR = vlc_blur 
-    let vlc_command = `vlc --loop ${vlc_file} --no-osd --no-embedded-video ${blur_enabled ? `--video-filter=gaussianblur --gaussianblur-sigma=${vlc_blur} --codec avcodec,none` : ''}`
+    let vlc_command = `omxplayer --loop --no-osd -o hdmi ${vlc_file}`
     console.log(vlc_command);
     writeConfigVideo(vlc_command);
     console.log('... start vlc');
