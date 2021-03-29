@@ -5,6 +5,7 @@ const fs = require('fs');
 const { exec } = require('child_process');
 
 const configFile = '/uploaded/config.json';
+const configVideo = '/uploaded/video.sh';
 let config = [];
 
 const readConfigFile = () => {
@@ -29,6 +30,19 @@ const writeConfigFile = () => {
       console.log(err);
     } else {
       console.log('... success saving config file');
+    }
+  });
+}
+
+const writeConfigVideo = command => {
+  console.log('... write file for boot reproduction')
+  console.log('>> command:', command)
+  fs.writeFile(__dirname + configVideo, command ,err => {
+    if(err) {
+      console.log('... failed saving config video');
+      console.log(err);
+    } else {
+      console.log('... success saving config video');
     }
   });
 }
@@ -125,23 +139,34 @@ app.post('/api/videos', (req, res) => {
 });
 
 app.post('/api/play', (req,res) => {
-  console.log('... get to \'/api/play\'')
-  console.log(req.body)
-  // exec('dir', (err, stdout, stderr) => {
-  //   console.log(err)
-  //   console.log(stdout)
-  //   console.log(stderr)
-  // })
+  exec('pkill -f "vlc --loop"', (err, stdout, stderr) => {
+    console.log('... get to \'/api/play\'')
+    console.log('killing vlc proccess');
+    console.log(req.body)
+    const vlc_file = `${__dirname}/uploaded/${req.body.video}`
+    const vlc_blur = req.body.blur
+    const blur_enabled = req.body.blur > 0 ? true : false
+    process.env.VLC_FILE = vlc_file
+    process.env.VLC_BLUR = vlc_blur 
+    let vlc_command = `vlc --loop ${vlc_file} --no-osd --no-embedded-video ${blur_enabled ? `--video-filter=gaussianblur --gaussianblur-sigma=${vlc_blur} --codec avcodec,none` : ''}`
+    console.log(vlc_command);
+    writeConfigVideo(vlc_command);
+    console.log('... start vlc');
+    exec(vlc_command, (err, stdout, stderr) => {
+      console.log(err);
+      console.log(stdout);
+      console.log(stderr);
+      console.log('... finish vlc');
+    })
+  })
   res.send('paying')
 })
 
 app.get('/api/stop', (req,res) => {
   console.log('... post to \'/api/stop\'')
-  // exec('dir', (err, stdout, stderr) => {
-  //   console.log(err)
-  //   console.log(stdout)
-  //   console.log(stderr)
-  // })
+  exec('pkill -f "vlc --loop"', (err, stdout, stderr) => {
+    console.log('killing vlc proccess');
+  })
   res.send('stopped')
 })
 
