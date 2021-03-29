@@ -47,6 +47,29 @@ const writeConfigVideo = command => {
   });
 }
 
+const videoName = filename => {
+  const filename_parts = filename.split('.')
+  filename_parts.pop()
+  return filename_parts.join('.')
+}
+
+const videoExtension = filename => {
+  const filename_parts = filename.split('.')
+  return filename_parts.pop()
+}
+
+const removeMatchingName = file => {
+  const fileroot = videoName(file);
+  let files;
+  let filesToDelete;
+  fs.readdir(__dirname + '/uploaded', (err, data)=>{
+    files = data
+    filesToDelete = files.filter(file => file.includes(fileroot))
+    console.log('_____ FILES TO DELETE')
+    console.log(filesToDelete)
+  })
+}
+
 readConfigFile()
 
 const app = express();
@@ -92,8 +115,14 @@ app.delete('/api/videos/:id', (req, res) => {
   if (!video) res.status(404).send('not found')
   const index = config.indexOf(video)
   config.splice(index, 1)
-  fs.rm(__dirname+'/uploaded/'+req.params.id,err=>{
-    if (err) console.log('... file can not be removed');
+  console.log('>>>>>>>> DELETE')
+  removeMatchingName(video)
+  console.log(__dirname + '/uploaded/' + videoName(req.params.id) + '*')
+  exec('rm '+__dirname + '/uploaded/' + videoName(req.params.id) + '*',err=>{
+    if (err) {
+      console.log('... file can not be removed');
+      console.log(err);
+    }
     else console.log('... file removed!')
   })
   res.send(video);
@@ -139,7 +168,7 @@ app.post('/api/videos', (req, res) => {
 });
 
 app.post('/api/play', (req,res) => {
-  exec('pkill -f "vlc --loop"', (err, stdout, stderr) => {
+  exec('pkill -f omxplayer', (err, stdout, stderr) => {
     console.log('... get to \'/api/play\'')
     console.log('killing vlc proccess');
     console.log(req.body)
@@ -149,6 +178,41 @@ app.post('/api/play', (req,res) => {
     process.env.VLC_FILE = vlc_file
     process.env.VLC_BLUR = vlc_blur 
     let vlc_command = `omxplayer --loop --no-osd -o hdmi ${vlc_file}`
+    if (blur_enabled){
+      const vlc_file_parts = vlc_file.split('.');
+      vlc_file_parts[vlc_file_parts.length - 2] = vlc_file_parts[vlc_file_parts.length - 2]+'_blur_'+req.body.blur
+      const blur_file = vlc_file_parts.join('.')
+      console.log(blur_file)
+      const path = blur_file
+      try {
+        if (fs.existsSync(path)) {
+          vlc_command = `omxplayer --loop --no-osd -o hdmi ${blur_file}`
+        } else {
+          console.log('>>>>>>>>>> CREATE BLUR VERSION')
+          const blurCommand = `ffmpeg -i ${vlc_file} -vf "gblur=sigma=${req.body.blur}" ${blur_file}`
+          console.log(blurCommand)
+          exec(blurCommand, (err, stdout, stderr) => {
+            console.log(err);
+            console.log(stdout);
+            console.log(stderr);
+            exec('pkill -f omxplayer', (err, stdout, stderr) => {
+              console.log(err);
+              console.log(stdout);
+              console.log(stderr);
+              vlc_command = `omxplayer --loop --no-osd -o hdmi ${blur_file}`
+              writeConfigVideo(vlc_command);
+              exec(vlc_command, (err, stdout, stderr) => {
+                console.log(err);
+                console.log(stdout);
+                console.log(stderr);
+              })
+            })
+          })
+        }
+      } catch(err) {
+        console.log('.... strange errors')
+      }
+    }
     console.log(vlc_command);
     writeConfigVideo(vlc_command);
     console.log('... start vlc');
@@ -164,7 +228,7 @@ app.post('/api/play', (req,res) => {
 
 app.get('/api/stop', (req,res) => {
   console.log('... post to \'/api/stop\'')
-  exec('pkill -f "vlc --loop"', (err, stdout, stderr) => {
+  exec('pkill -f "omxplayer"', (err, stdout, stderr) => {
     console.log('killing vlc proccess');
   })
   res.send('stopped')
