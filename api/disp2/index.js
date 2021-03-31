@@ -168,7 +168,7 @@ app.post('/api/videos', (req, res) => {
 });
 
 app.post('/api/play', (req,res) => {
-  exec('pkill -f "omxplayer --display 2" ', (err, stdout, stderr) => {
+  exec('pkill -f "omxplayer --display 7" ', (err, stdout, stderr) => {
     console.log('... get to \'/api/play\'')
     console.log('... stop old loop');
     console.log(req.body)
@@ -177,7 +177,7 @@ app.post('/api/play', (req,res) => {
     const blur_enabled = req.body.blur > 0 ? true : false
     process.env.VLC_FILE = vlc_file
     process.env.VLC_BLUR = vlc_blur 
-    let vlc_command = `omxplayer --display 2 --loop --no-osd -o hdmi ${vlc_file}`
+    let vlc_command = `omxplayer --display 7 --loop --no-osd -o hdmi ${vlc_file}`
     if (blur_enabled){
       const vlc_file_parts = vlc_file.split('.');
       vlc_file_parts[vlc_file_parts.length - 2] = vlc_file_parts[vlc_file_parts.length - 2]+'_blur_'+req.body.blur
@@ -186,7 +186,7 @@ app.post('/api/play', (req,res) => {
       const path = blur_file
       try {
         if (fs.existsSync(path)) {
-          vlc_command = `omxplayer --display 2 --loop --no-osd -o hdmi ${blur_file}`
+          vlc_command = `omxplayer --display 7 --loop --no-osd -o hdmi ${blur_file}`
         } else {
           console.log('>>>>>>>>>> CREATE BLUR VERSION')
           const blurCommand = `ffmpeg -i ${vlc_file} -vf "gblur=sigma=${req.body.blur}" ${blur_file}`
@@ -195,11 +195,11 @@ app.post('/api/play', (req,res) => {
             console.log(err);
             console.log(stdout);
             console.log(stderr);
-            exec('pkill -f "omxplayer --display 2"', (err, stdout, stderr) => {
+            exec('pkill -f "omxplayer --display 7"', (err, stdout, stderr) => {
               console.log(err);
               console.log(stdout);
               console.log(stderr);
-              vlc_command = `omxplayer --display 2 --loop --no-osd -o hdmi ${blur_file}`
+              vlc_command = `omxplayer --display 7 --loop --no-osd -o hdmi ${blur_file}`
               writeConfigVideo(vlc_command);
               exec(vlc_command, (err, stdout, stderr) => {
                 console.log(err);
@@ -236,5 +236,5 @@ app.get('/api/stop', (req,res) => {
 
 
 
-port = 10000
+port = 20000
 app.listen(port, () => console.log('...listening on ' + port))
