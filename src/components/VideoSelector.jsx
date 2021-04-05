@@ -18,7 +18,7 @@ const VideoSelector = ({
   const [saved, setSaved] = useState([])
 
   const getSavedVideos = (displayName, saveCallBack) => {
-    axios.get(`http://${displayName}/api/videos`, {timeout: 2000})
+    axios.get(`http://${displayName}/api/videos`, {timeout: 500})
     .then(resp => {
       saveCallBack(resp.data)
       setExists(resp.data.includes(name))
@@ -103,7 +103,7 @@ const VideoSelector = ({
       <div className="card-image">
         <ReactPlayer
           url={path}
-          playing={true}
+          playing={false}
           controls
           width='100%'
           height='50vh'

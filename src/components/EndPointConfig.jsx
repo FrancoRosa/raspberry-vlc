@@ -26,7 +26,7 @@ const EndPointConfig = ({
   }
   
   const checkIP = (displayName, displayCallBack, storeCallback) => {
-    axios.get(`http://${displayName}`, {timeout: 2000})
+    axios.get(`http://${displayName}`, {timeout: 500})
     .then(resp => {
       console.log(resp.data);
       displayCallBack(true);
