@@ -1,6 +1,6 @@
 # raspberry-vlc
 
-> Signage system based on RPI, it includes a UI to control the video players
+> Digital Signage system based on RPI, it includes a UI to control the video players
 
 - [raspberry-vlc](#raspberry-vlc)
   - [Live demo](#live-demo)
