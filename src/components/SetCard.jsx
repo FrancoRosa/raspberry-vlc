@@ -1,3 +1,5 @@
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { connect } from "react-redux";
 import { selectVideoSet } from "../actions";
@@ -31,8 +33,10 @@ const SetCard = ({ setInfo, selectVideoSet, videosets, displays }) => {
     > 
       <p>{setTitle}</p>
       {selected && <div className="controls">
-        <i className="fas fa-play" onClick={playSet}/>
-        <i className="fas fa-stop" onClick={stopSet}/>
+        <FontAwesomeIcon icon={faPlay} onClick={playSet}/>
+        <FontAwesomeIcon icon={faStop} onClick={stopSet}/>
+        {/* <i className="fas fa-play" onClick={playSet}/>
+        <i className="fas fa-stop" onClick={stopSet}/> */}
       </div>}
     </a>
   )
