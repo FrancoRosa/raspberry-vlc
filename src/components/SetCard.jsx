@@ -1,3 +1,5 @@
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { connect } from "react-redux";
 import { selectVideoSet } from "../actions";
@@ -6,6 +8,8 @@ import { selectVideoSet } from "../actions";
 const SetCard = ({ setInfo, selectVideoSet, videosets, displays }) => {
   const { setTitle, selected, id } = setInfo;
   const playSet = () => {
+    console.log('... play set')
+    
     let url = '';
     let videoset = videosets.filter(videoset => videoset.selected)[0]
     url = `http://${displays[0].ip}/api/play`;
@@ -17,6 +21,7 @@ const SetCard = ({ setInfo, selectVideoSet, videosets, displays }) => {
   }
 
   const stopSet = () => {
+    console.log('... stop set')
     let url = '';
     displays.forEach(display => {
       url = `http://${display.ip}/api/stop`;
@@ -31,8 +36,8 @@ const SetCard = ({ setInfo, selectVideoSet, videosets, displays }) => {
     > 
       <p>{setTitle}</p>
       {selected && <div className="controls">
-        <i className="fas fa-play" onClick={playSet}/>
-        <i className="fas fa-stop" onClick={stopSet}/>
+        <FontAwesomeIcon icon={faPlay} onClick={playSet} title="play" />
+        <FontAwesomeIcon icon={faStop} onClick={stopSet} title="stop" />
       </div>}
     </a>
   )
